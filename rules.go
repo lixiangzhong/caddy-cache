@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -36,7 +37,7 @@ func (rule *PathCacheRule) matches(req *http.Request, statusCode int, respHeader
 func (rule *HeaderCacheRule) matches(req *http.Request, statusCode int, respHeaders http.Header) bool {
 	headerValue := respHeaders.Get(rule.Header)
 	for _, expectedValue := range rule.Value {
-		if expectedValue == headerValue {
+		if expectedValue == headerValue || strings.Contains(headerValue, expectedValue) {
 			return true
 		}
 	}
@@ -55,6 +56,7 @@ func getCacheableStatus(req *http.Request, response *Response, config *Config) (
 
 	reasonsNotToCache, expiration, err := cacheobject.UsingRequestResponse(req, response.Code, response.snapHeader, false)
 
+	fmt.Println(reasonsNotToCache, expiration, err)
 	// err means there was an error parsing headers
 	// Just ignore them and make response not cacheable
 	if err != nil {

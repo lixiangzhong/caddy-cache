@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/nicolasazrak/caddy-cache/storage"
+	"github.com/lixiangzhong/caddy-cache/storage"
 )
 
 // HTTPCacheEntry saves the request response of an http request
